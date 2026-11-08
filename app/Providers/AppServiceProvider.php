@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
     {
         
         VerifyEmail::createUrlUsing(function (object $notifiable) {
-            $frontendUrl = config('app.frontend_url'); 
+            $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
             $verifyUrl = URL::temporarySignedRoute(
                 'verification.verify',
                 now()->addMinutes(Config::get('auth.verification.expire', 60)),
@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
-            $frontendUrl = config('app.frontend_url');
+            $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
             $email = urlencode($notifiable->getEmailForPasswordReset());
             
             return $frontendUrl . '/reset-password/' . $token . '?email=' . $email;
@@ -59,8 +59,8 @@ class AppServiceProvider extends ServiceProvider
                 ->greeting('¡Hola!')
                 ->line('Recibes este correo porque solicitaste un restablecimiento de contraseña para tu cuenta.')
                 ->action('Restablecer Contraseña', $url)
-                ->line('Si tienes problemas con el botón, copia y pega el siguiente enlace en tu navegador:')
-                ->line($url)
+                // ->line('Si tienes problemas con el botón, copia y pega el siguiente enlace en tu navegador:')
+                // ->line($url)
                 ->line('Este enlace expirará en 60 minutos.')
                 ->line('Si no solicitaste este cambio, no es necesario realizar ninguna acción.')
                 ->salutation('El equipo de Expresión Sublime');

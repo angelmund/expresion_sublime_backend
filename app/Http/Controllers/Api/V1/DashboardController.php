@@ -15,9 +15,6 @@ class DashboardController extends Controller
         $totalProductos = Articulo::count();
         $totalCategorias = Categoria::count();
         $totalUsuarios = User::count();
-        
-        // Si no tienes una columna 'stock' real en la BD, puedes cambiar esto por 0
-        // o calcularlo en base a otra condición (ej. Articulo::where('activo', false)->count())
         $productosBajoStock = Articulo::where('stock', '<=', 5)->count();
 
         return response()->json([
