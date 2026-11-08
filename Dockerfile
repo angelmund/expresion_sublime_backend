@@ -1,16 +1,12 @@
-# Usa la imagen oficial optimizada que incluye PHP 8.4 y Nginx
+# Usa la imagen oficial optimizada
 FROM serversideup/php:8.4-fpm-nginx
 
 # Establecer el directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar todo tu proyecto de Laravel y asignar los permisos correctos
+# Copiar todo tu proyecto y asignar permisos
 COPY --chown=www-data:www-data . /var/www/html
 
-# Instalar las dependencias de PHP para producción
-RUN composer install --no-interaction --optimize-autoloader --no-dev
-
-# Optimizar la caché de Laravel para que sea más rápido
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache
+# Instalar dependencias y destruir cualquier caché residual
+RUN composer install --no-interaction --optimize-autoloader --no-dev && \
+    rm -f bootstrap/cache/*.php
