@@ -17,7 +17,17 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
-        $middleware->trustProxies(at: '*');
+        $middleware->statefulApi(); 
+        $middleware->trustProxies(
+            at: app()->environment('local') 
+                ? '*' 
+                : ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'],
+            headers: \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR
+                | \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST
+                | \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT
+                | \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO
+                | \Illuminate\Http\Request::HEADER_X_FORWARDED_PREFIX,
+        );
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
