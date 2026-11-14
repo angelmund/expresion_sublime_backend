@@ -6,6 +6,8 @@ services:
     container_name: laravel_backend
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
