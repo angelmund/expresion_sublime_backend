@@ -15,12 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         
         $middleware->statefulApi(); 
-
+        
         $middleware->replace(
             \Illuminate\Http\Middleware\TrustProxies::class,
             \App\Http\Middleware\TrustProxies::class
         );
-        
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,

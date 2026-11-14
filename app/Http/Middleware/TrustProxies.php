@@ -24,7 +24,6 @@ class TrustProxies extends Middleware
         }
 
         $raw = config('app.trusted_proxies', '');
-        
         $this->proxies = $raw === ''
             ? []
             : array_map('trim', explode(',', $raw));
