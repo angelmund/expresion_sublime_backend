@@ -27,12 +27,13 @@ class ArticuloController extends Controller
         }
 
         $articulos = Articulo::select(
-            'id', 'nombre', 'descripcion', 'precio_base', 'precio_descuento',
-            'stock', 'activo', 'imagen', 'created_at', 'categoria_id'
+        'id', 'nombre', 'descripcion', 'precio_base', 'precio_descuento',
+        'stock', 'activo', 'imagen', 'categoria_id'
         )
+        ->where('activo', true)
         ->with([
             'categoria:id,nombre',
-            'medidas:id,nombre' 
+            'medidas:id,nombre'
         ])
         ->get();
         

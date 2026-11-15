@@ -13,11 +13,15 @@ class CategoriaController extends Controller
 {
     public function index()
     {
-        if (!Auth::check() || !Auth::user()->hasAnyRole(['admin', 'user'])) {
-            return response()->json(['status' => false, 'message' => 'No autorizado'], 403);
+        
+        if (Auth::check() && Auth::user()->hasAnyRole(['admin', 'user'])) {
+            $categorias = Categoria::select('id', 'nombre', 'descripcion', 'activo', 'slug', 'imagen')->get();
+        } else {
+            $categorias = Categoria::select('id', 'nombre', 'descripcion', 'activo', 'slug', 'imagen')
+                ->where('activo', true)
+                ->get();
         }
 
-        $categorias = Categoria::select('id', 'nombre', 'descripcion', 'activo', 'slug', 'imagen')->get();
         $categorias->transform(function ($categoria) {
             if ($categoria->imagen) {
                 $categoria->imagen = asset('storage/' . $categoria->imagen);
@@ -26,7 +30,6 @@ class CategoriaController extends Controller
         });
         return response()->json($categorias);
     }
-
     public function store(Request $request)
     {
         if (!Auth::check() || !Auth::user()->hasAnyRole(['admin', 'user'])) {
