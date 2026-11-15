@@ -4,6 +4,8 @@ services:
       context: ./
       dockerfile: Dockerfile
     container_name: laravel_backend
+    volumes:
+      - laravel_storage:/var/www/html/storage/app/public
     ports:
       - "8080:8080"
     env_file:
@@ -12,3 +14,6 @@ services:
       - APP_ENV=production
       - APP_DEBUG=false
     restart: unless-stopped
+
+volumes:
+  laravel_storage:
