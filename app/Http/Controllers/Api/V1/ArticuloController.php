@@ -56,11 +56,12 @@ class ArticuloController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'precio_base' => 'required|numeric|gt:0',
+            'precio_descuento' => 'nullable|numeric|gte:0',
             'categoria' => 'required|exists:categorias,id',
             'imagen_muestra' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $data = $request->only(['nombre', 'precio_base', 'descripcion']);
+        $data = $request->only(['nombre', 'precio_base', 'precio_descuento', 'descripcion']);
         $data['categoria_id'] = $request->categoria;
         $data['activo'] = filter_var($request->activo, FILTER_VALIDATE_BOOLEAN);
 
@@ -101,11 +102,12 @@ class ArticuloController extends Controller
         $request->validate([
             'nombre' => 'sometimes|required|string|max:255',
             'precio_base' => 'required|numeric|gt:0',
+            'precio_descuento' => 'nullable|numeric|gte:0',
             'categoria' => 'sometimes|required|exists:categorias,id',
             'imagen_muestra' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $data = $request->only(['nombre', 'precio_base', 'descripcion']);
+        $data = $request->only(['nombre', 'precio_base', 'precio_descuento', 'descripcion']);
         if ($request->has('categoria')) $data['categoria_id'] = $request->categoria;
         if ($request->has('activo')) $data['activo'] = filter_var($request->activo, FILTER_VALIDATE_BOOLEAN);
 
